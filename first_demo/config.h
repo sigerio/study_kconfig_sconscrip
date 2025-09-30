@@ -4,6 +4,6 @@
 
 #define CONFIG_SAY_HELLO 1
 #define CONFIG_CUSTOM_MSG "ha?"
-#define CONFIG_MAX_COUNT 4
+#define CONFIG_MAX_COUNT 6
 
 #endif

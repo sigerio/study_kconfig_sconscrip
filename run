@@ -1,0 +1,70 @@
+# 进入你的顶层目录（假设路径是 ~/share/study_kconfig_sconscrip）
+#!/bin/bash
+
+# 脚本名称：run
+# 用法：./run -name <demo_name>
+# 功能：进入指定子目录并执行其中的 menu.sh
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+usage() {
+    echo "用法: $0 -name <文件夹名>"
+    echo "示例: $0 -name first_demo"
+    exit 1
+}
+
+# 解析命令行参数
+DEMO_NAME=""
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        -name)
+            if [ -n "$2" ] && [ "${2:0:1}" != "-" ]; then
+                DEMO_NAME="$2"
+                shift 2
+            else
+                echo "错误: -name 需要一个参数"
+                usage
+            fi
+            ;;
+        *)
+            echo "未知参数: $1"
+            usage
+            ;;
+    esac
+done
+
+# 检查是否提供了 -name
+if [ -z "$DEMO_NAME" ]; then
+    echo "错误: 请使用 -name 指定子文件夹名"
+    usage
+fi
+
+# 构建目标路径
+TARGET_DIR="$SCRIPT_DIR/$DEMO_NAME"
+
+# 检查目录是否存在
+if [ ! -d "$TARGET_DIR" ]; then
+    echo "❌ 错误: 目录不存在: $TARGET_DIR"
+    exit 1
+fi
+
+# 检查 menu.sh 是否存在
+MENU_SCRIPT="$TARGET_DIR/menu.sh"
+if [ ! -f "$MENU_SCRIPT" ]; then
+    echo "❌ 错误: 未找到 $MENU_SCRIPT"
+    exit 1
+fi
+
+# 检查是否可执行，若不可执行则赋予权限
+if [ ! -x "$MENU_SCRIPT" ]; then
+    echo "🔧 赋予 menu.sh 执行权限..."
+    chmod +x "$MENU_SCRIPT"
+fi
+
+echo "🚀 进入目录: $TARGET_DIR"
+echo "▶️  执行: ./menu.sh"
+echo "----------------------------------------"
+
+# 进入目录并执行脚本
+cd "$TARGET_DIR" || exit 1
+exec ./menu.sh
