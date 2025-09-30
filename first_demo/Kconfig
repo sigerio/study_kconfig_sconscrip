@@ -1,0 +1,18 @@
+mainmenu "My First Kconfig Demo"
+
+config SAY_HELLO
+    bool "Say Hello"
+    default y
+    help
+      Print a greeting message.
+
+config CUSTOM_MSG
+    string "Custom greeting message"
+    default "Hello from Kconfig!"
+    depends on SAY_HELLO
+
+config MAX_COUNT
+    int "Max loop count"
+    default 3
+    range 1 10
+    depends on SAY_HELLO
