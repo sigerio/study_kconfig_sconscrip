@@ -16,3 +16,30 @@ config MAX_COUNT
     default 3
     range 1 10
     depends on SAY_HELLO
+
+config WHAT_HAPPEN
+    bool "what happen?"
+    default y
+    help
+        Printf a string
+    prompt "WHAT_HAPPEN: this is prompt will replace what happen"
+
+config WHAT_IS_DEPEND
+    bool "what is depend"
+    default n
+    depends on WHAT_HAPPEN
+
+config WHAT_IS_HEX
+    hex "what's this?"
+    default 0
+
+config WILL_BE_OPEN_WHEN_A_IS_SELECTED
+    bool "BB"
+    default n
+    depends on WHAT_HAPPEN
+
+config SELECT_A_TO_MAKE_B_ON
+    bool "AA"
+    select WILL_BE_OPEN_WHEN_A_IS_SELECTED
+    default n
+    prompt "AA: if u select this ,will make BB on also and BB will not to be changed"
