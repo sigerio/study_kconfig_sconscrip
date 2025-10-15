@@ -1,11 +1,27 @@
 mainmenu "My First Kconfig Demo"
 
+config SHOW_MENU
+    bool "show menu or not"
+    default n
+
+menu "test visible if"
+    visible if SHOW_MENU
+
+config MENU_MSG_1
+    string "MENU_MSG_1 is shown"
+
+
+config MENU_MSG_2
+    string "MENU_MSG_2 is shown"
+
+
+endmenu
+
 config SAY_HELLO
     bool "Say Hello"
     default y
     help
       Print a greeting message.
-
 config CUSTOM_MSG
     string "Custom greeting message"
     default "Hello from Kconfig!"
@@ -33,13 +49,39 @@ config WHAT_IS_HEX
     hex "what's this?"
     default 0
 
+config BB_DEPENDS_ON_ME
+    bool "BB_DEPENDS"
+    default n
+    help
+        WILL_BE_OPEN_WHEN_A_IS_SELECTED the BB depends on me    
+
 config WILL_BE_OPEN_WHEN_A_IS_SELECTED
     bool "BB"
     default n
-    depends on WHAT_HAPPEN
+    depends on BB_DEPENDS_ON_ME
 
 config SELECT_A_TO_MAKE_B_ON
     bool "AA"
     select WILL_BE_OPEN_WHEN_A_IS_SELECTED
     default n
     prompt "AA: if u select this ,will make BB on also and BB will not to be changed"
+
+
+config DD_DEPENDS_ON_ME
+    bool "DD_DEPENDS"
+    default n
+    help
+        WILL_BE_NOTE_WHEN_C_IS_SELECTED the DD depends on me 
+
+config WILL_BE_NOTE_WHEN_C_IS_SELECTED
+    bool "DD"
+    depends on DD_DEPENDS_ON_ME
+    default n
+    prompt "this is D"
+
+config SELECT_C_TO_MAKE_NOTE_TO_OPEN_D
+    bool "CC"
+    imply WILL_BE_NOTE_WHEN_C_IS_SELECTED
+    default n
+    prompt "CC : if u selected this, we will note that open the D or not"
+

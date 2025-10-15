@@ -31,5 +31,17 @@ int main() {
         printf("open a will make b is also on.\n");
     #endif
 #endif
+
+
+#ifdef CONFIG_WILL_BE_NOTE_WHEN_C_IS_SELECTED
+    #ifdef CONFIG_SELECT_C_TO_MAKE_NOTE_TO_OPEN_D
+        printf("not D when C is selected\n");
+    #endif
+#endif
+
+
+
+
+
     return 0;
 }

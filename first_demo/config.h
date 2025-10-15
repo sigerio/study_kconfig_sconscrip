@@ -2,9 +2,10 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#define CONFIG_SAY_HELLO 1
-#define CONFIG_CUSTOM_MSG "ha?"
-#define CONFIG_MAX_COUNT 6
+#define CONFIG_MENU_MSG_1 ""
+#define CONFIG_MENU_MSG_2 ""
+#define CONFIG_CUSTOM_MSG ""
+#define CONFIG_MAX_COUNT 
 #define CONFIG_WHAT_HAPPEN 1
 
 #endif
