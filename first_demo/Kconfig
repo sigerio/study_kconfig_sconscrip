@@ -1,3 +1,8 @@
+# 启用模块支持（关键！）
+config MODULES
+    bool "Enable loadable module support"
+    default y
+
 mainmenu "My First Kconfig Demo"
 
 config SHOW_MENU
@@ -84,4 +89,32 @@ config SELECT_C_TO_MAKE_NOTE_TO_OPEN_D
     imply WILL_BE_NOTE_WHEN_C_IS_SELECTED
     default n
     prompt "CC : if u selected this, we will note that open the D or not"
+
+# ===== bool 示例（嵌入式常用）=====
+config USE_BOOL_FEATURE
+    bool "Enable Bool Feature (embedded style)"
+    default n
+    help
+      This uses 'bool' — typical for embedded systems like Luban.
+      Only two states: built-in (y) or disabled (n).
+
+# ===== tristate 示例（Linux 模块风格）=====
+config USE_TRISTATE_FEATURE
+    tristate "Enable Tristate Feature (module style)"
+    default n
+    help
+      This uses 'tristate' — typical for Linux kernel.
+      Three states:
+        Y = built into firmware
+        M = built as loadable module (.ko)
+        N = disabled
+
+# ===== 依赖项（展示 select 行为）=====
+config CORE_BOOL
+    bool "Core Bool Support"
+    default y
+
+config CORE_TRISTATE
+    tristate "Core Tristate Support"
+    default y
 

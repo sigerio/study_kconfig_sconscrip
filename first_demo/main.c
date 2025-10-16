@@ -40,6 +40,25 @@ int main() {
 #endif
 
 
+    printf("=== Feature Status ===\n");
+
+    // Bool feature
+#ifdef CONFIG_USE_BOOL_FEATURE
+    printf("✅ Bool Feature: BUILT-IN\n");
+#else
+    printf("❌ Bool Feature: DISABLED\n");
+#endif
+
+    // Tristate feature
+#ifdef CONFIG_USE_TRISTATE_FEATURE
+    #ifdef CONFIG_USE_TRISTATE_FEATURE_MODULE
+        printf("📦 Tristate Feature: MODULE (would be .ko in Linux)\n");
+    #else
+        printf("✅ Tristate Feature: BUILT-IN\n");
+    #endif
+#else
+    printf("❌ Tristate Feature: DISABLED\n");
+#endif
 
 
 

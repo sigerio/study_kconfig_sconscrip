@@ -2,10 +2,13 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
+#define CONFIG_MODULES 1
 #define CONFIG_MENU_MSG_1 ""
 #define CONFIG_MENU_MSG_2 ""
-#define CONFIG_CUSTOM_MSG ""
-#define CONFIG_MAX_COUNT 
+#define CONFIG_SAY_HELLO 1
+#define CONFIG_CUSTOM_MSG "Hello from Kconfig!"
+#define CONFIG_MAX_COUNT 3
 #define CONFIG_WHAT_HAPPEN 1
+#define CONFIG_CORE_BOOL 1
 
 #endif

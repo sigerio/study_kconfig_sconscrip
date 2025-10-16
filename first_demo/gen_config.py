@@ -21,6 +21,14 @@ with open('config.h', 'w') as f:
             f.write(f"#define CONFIG_{name} {sym.str_value}\n")
         elif sym.type == STRING:
             f.write(f'#define CONFIG_{name} "{sym.str_value}"\n')
+        elif sym.type == TRISTATE:
+            if sym.tri_value == 2:  # y
+                f.write(f"#define CONFIG_{name} 1\n")
+                f.write(f"#define CONFIG_{name}_MODULE 0\n")
+            elif sym.tri_value == 1:  # m
+                f.write(f"#define CONFIG_{name} 1\n")
+                f.write(f"#define CONFIG_{name}_MODULE 1\n")
+            # n: 不定义
     f.write("\n#endif\n")
 
 print("✅ config.h generated")
