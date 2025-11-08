@@ -1,6 +1,30 @@
-# 启用模块支持（关键！）
+# 启用模块支持    三元选择
 config MODULES
     bool "Enable loadable module support"
+    default y
+    prompt "U must set this to y if u want to use 'tristate' !!"
+
+# ===== bool 示例=====
+config USE_BOOL_FEATURE
+    bool "Enable Bool Feature (embedded style)"
+    default n
+    help
+      This uses 'bool' — typical for embedded systems like Luban.
+      Only two states: built-in (y) or disabled (n).
+
+# ===== tristate 示例=====
+config USE_TRISTATE_FEATURE
+    tristate "Enable Tristate Feature (module style)"
+    default n
+    help
+      This uses 'tristate' — typical for Linux kernel.
+      Three states:
+        Y = built into firmware
+        M = built as loadable module (.ko)
+        N = disabled
+
+config CORE_TRISTATE
+    tristate "Core Tristate Support"
     default y
 
 mainmenu "My First Kconfig Demo"
@@ -9,8 +33,80 @@ config SHOW_MENU
     bool "show menu or not"
     default n
 
-menu "test visible if"
+
+#===============一些基础用法==================
+menu "kconfig base"
     visible if SHOW_MENU
+
+
+config PRINTF_MSG 
+    bool "this is a base type : bool , u can change this to see what happen in programe"  #类型后面的字符串作为描述该选项的简要说明 在没有使用prompt时 优先显示该部分
+    default y
+    help
+      Print a greeting message.
+config CUSTOM_MSG
+    string "Custom a message"
+    default "Hello from Kconfig!"
+    depends on PRINTF_MSG #指示该配置依赖于 SAY HELLO 
+
+config MAX_COUNT
+    int "how many msg will be printf"
+    default 3
+    range 1 10  #指定输入数字的范围
+    depends on PRINTF_MSG
+
+
+config WHAT_IS_HEX
+    hex "this will set a hex value, which will be use in programe"
+    default 0
+
+
+config B_DEPENDS_ON_ME
+    bool "B depends on me"
+    default n
+    help
+        the A B will used to learn about select 
+
+config WILL_BE_OPEN_WHEN_A_IS_SELECTED
+    bool "B"
+    default n
+    depends on B_DEPENDS_ON_ME
+    prompt "this is B"
+
+config SELECT_A_TO_MAKE_B_ON
+    bool "A"
+    select WILL_BE_OPEN_WHEN_A_IS_SELECTED      #强制选择，并且使被选择项无法被修改
+    default n
+    prompt "A: if u select this ,will change B's state, regardless of whether B is visible or not, and B will not be changed"
+
+
+config D_DEPENDS_ON_ME
+    bool "this is E, and D depends on me"
+    default n
+    help
+        the C D will used to learn about imply 
+
+config WILL_BE_NOTE_WHEN_C_IS_SELECTED
+    bool "D"
+    depends on D_DEPENDS_ON_ME
+    default n
+    prompt "this is D"
+
+config SELECT_C_TO_MAKE_NOTE_TO_OPEN_D
+    bool "C"
+    imply WILL_BE_NOTE_WHEN_C_IS_SELECTED   #它的用法很奇怪，当E开启的时候，D 和 C不会同步， 但是如果E关闭，无论D是否被选中，它都会同步C的值，并且这个情况只会在第一次进入配置项时生效，一旦单独选中D，这俩就不会再同步了
+    default n
+    prompt "C : if u selected this, we will note that open the D or not"
+
+endmenu
+
+
+
+#==========菜单的隐藏和显示=================
+
+
+menu "test visible if"
+    visible if SHOW_MENU #分配该菜单归属于 show_menu 配置项 仅当其开启后才能查看菜单内容,未开启时，全部都会被隐藏
 
 config MENU_MSG_1
     string "MENU_MSG_1 is shown"
@@ -22,99 +118,121 @@ config MENU_MSG_2
 
 endmenu
 
-config SAY_HELLO
-    bool "Say Hello"
+
+#===============使用方式和c语言中的运算符基本是一致的====================
+
+menu "BNF语法"
+    depends on SHOW_MENU
+
+config EXPR_BASE_BOOL
+    bool "the base of BNF type bool "
     default y
-    help
-      Print a greeting message.
-config CUSTOM_MSG
-    string "Custom greeting message"
-    default "Hello from Kconfig!"
-    depends on SAY_HELLO
+config EXPR_SIGNAL_SYMBOL  #<expr> ::= <symbol>
+    bool "一个表达式可由一个符号构成"
+    depends on EXPR_BASE_BOOL
 
-config MAX_COUNT
-    int "Max loop count"
-    default 3
-    range 1 10
-    depends on SAY_HELLO
 
-config WHAT_HAPPEN
-    bool "what happen?"
-    default y
-    help
-        Printf a string
-    prompt "WHAT_HAPPEN: this is prompt will replace what happen"
+config EXPR_BASE_INT
+    int "the base of BNF type int"
+    default 4
+    range 0 10
 
-config WHAT_IS_DEPEND
-    bool "what is depend"
+config EXPR_EQUAL_SYMBOL  #<expr> = <symbol>
+    bool "表达式也可以是简单的判断语句"
     default n
-    depends on WHAT_HAPPEN
+    depends on EXPR_BASE_INT = 4  # if(EXPR_BASE_INT == 4)?true:false
 
-config WHAT_IS_HEX
-    hex "what's this?"
-    default 0
-
-config BB_DEPENDS_ON_ME
-    bool "BB_DEPENDS"
+config EXPR_NOT_COMP_SYMBOL  #<expr> > < = != <symbol>
+    bool "数值比较"
     default n
-    help
-        WILL_BE_OPEN_WHEN_A_IS_SELECTED the BB depends on me    
+    depends on EXPR_BASE_INT > 5   # if(EXPR_BASE_INT > 5)?true:false
 
-config WILL_BE_OPEN_WHEN_A_IS_SELECTED
-    bool "BB"
+
+
+config EXPR_BASE_STRING
+    string "the base of BNF type string"
+    default "linux"
+config EXPR_NOT_EQUAL_SYMBOL  #<expr> != <symbol>
+    bool "简单的比对"
     default n
-    depends on BB_DEPENDS_ON_ME
+    depends on EXPR_BASE_STRING = "linux"  # memcmp(EXPR_BASE_STRING, "linux") == 0
 
-config SELECT_A_TO_MAKE_B_ON
-    bool "AA"
-    select WILL_BE_OPEN_WHEN_A_IS_SELECTED
-    default n
-    prompt "AA: if u select this ,will make BB on also and BB will not to be changed"
+endmenu
 
+#===========菜单选项=============
+menu "MENU_CONFIG"
+    depends on SHOW_MENU
 
-config DD_DEPENDS_ON_ME
-    bool "DD_DEPENDS"
-    default n
-    help
-        WILL_BE_NOTE_WHEN_C_IS_SELECTED the DD depends on me 
-
-config WILL_BE_NOTE_WHEN_C_IS_SELECTED
-    bool "DD"
-    depends on DD_DEPENDS_ON_ME
-    default n
-    prompt "this is D"
-
-config SELECT_C_TO_MAKE_NOTE_TO_OPEN_D
-    bool "CC"
-    imply WILL_BE_NOTE_WHEN_C_IS_SELECTED
-    default n
-    prompt "CC : if u selected this, we will note that open the D or not"
-
-# ===== bool 示例（嵌入式常用）=====
-config USE_BOOL_FEATURE
-    bool "Enable Bool Feature (embedded style)"
-    default n
-    help
-      This uses 'bool' — typical for embedded systems like Luban.
-      Only two states: built-in (y) or disabled (n).
-
-# ===== tristate 示例（Linux 模块风格）=====
-config USE_TRISTATE_FEATURE
-    tristate "Enable Tristate Feature (module style)"
-    default n
-    help
-      This uses 'tristate' — typical for Linux kernel.
-      Three states:
-        Y = built into firmware
-        M = built as loadable module (.ko)
-        N = disabled
-
-# ===== 依赖项（展示 select 行为）=====
-config CORE_BOOL
-    bool "Core Bool Support"
+menuconfig WIRELESS
+    bool "Enable Wireless Subsystem"
     default y
 
-config CORE_TRISTATE
-    tristate "Core Tristate Support"
+if WIRELESS  # 子系统打开后才解析下面内容
+
+menu "Wireless protocols"
+
+config WIFI
+    bool "Wi-Fi support"
     default y
+
+config BLUETOOTH
+    bool "Bluetooth support"
+    default y
+    depends on HAS_UART || HAS_USB  # 蓝牙必须有通信端口
+
+config ZIGBEE
+    bool "ZigBee support"
+    depends on ADVANCED_MODE        # 仅高级模式提供
+
+endmenu  # Wireless protocols
+
+menu "Wi-Fi drivers"
+    depends on WIFI
+    config WIFI_USB
+        bool "USB Wi-Fi Adapter"
+    config WIFI_SDIO
+        bool "SDIO Wi-Fi Adapter"
+endmenu
+
+endif  # WIRELESS
+
+endmenu
+
+
+
+menu "choice"
+    depends on SHOW_MENU
+
+choice
+    prompt "Enable debug mode"
+    optional        #optional 选项让choice可以不选择任何一个选项，普通的choice必须得选中一个才行
+
+config DEBUG_NONE
+    bool "No debug"
+
+config DEBUG_BASIC
+    bool "Basic debug"
+
+config DEBUG_FULL
+    bool "Full debug"
+
+endchoice
+
+
+choice
+    prompt "CPU architecture"
+    default ARCH_ARM
+
+config ARCH_ARM
+    bool "ARM"
+
+config ARCH_RISCV
+    bool "RISC-V"
+
+endchoice
+
+endmenu
+
+
+
 

@@ -1,15 +1,63 @@
-# CONFIG_SHOW_MENU is not set
-CONFIG_SAY_HELLO=y
-CONFIG_CUSTOM_MSG="Hello from Kconfig!"
-CONFIG_MAX_COUNT=3
-CONFIG_WHAT_HAPPEN=y
-# CONFIG_WHAT_IS_DEPEND is not set
-CONFIG_WHAT_IS_HEX=0x10
-# CONFIG_BB_DEPENDS_ON_ME is not set
-# CONFIG_SELECT_A_TO_MAKE_B_ON is not set
-# CONFIG_DD_DEPENDS_ON_ME is not set
-# CONFIG_SELECT_C_TO_MAKE_NOTE_TO_OPEN_D is not set
+CONFIG_MODULES=y
 # CONFIG_USE_BOOL_FEATURE is not set
 # CONFIG_USE_TRISTATE_FEATURE is not set
-CONFIG_CORE_BOOL=y
-CONFIG_CORE_TRISTATE=y
+# CONFIG_CORE_TRISTATE is not set
+CONFIG_SHOW_MENU=y
+
+#
+# kconfig base
+#
+CONFIG_PRINTF_MSG=y
+CONFIG_CUSTOM_MSG="Hello from Kconfig!"
+CONFIG_MAX_COUNT=3
+CONFIG_WHAT_IS_HEX=0
+# CONFIG_B_DEPENDS_ON_ME is not set
+# CONFIG_SELECT_A_TO_MAKE_B_ON is not set
+# CONFIG_D_DEPENDS_ON_ME is not set
+# CONFIG_SELECT_C_TO_MAKE_NOTE_TO_OPEN_D is not set
+# end of kconfig base
+
+#
+# test visible if
+#
+CONFIG_MENU_MSG_1=""
+CONFIG_MENU_MSG_2=""
+# end of test visible if
+
+#
+# BNF语法
+#
+CONFIG_EXPR_BASE_BOOL=y
+# CONFIG_EXPR_SIGNAL_SYMBOL is not set
+CONFIG_EXPR_BASE_INT=4
+# CONFIG_EXPR_EQUAL_SYMBOL is not set
+CONFIG_EXPR_BASE_STRING="linux"
+# CONFIG_EXPR_NOT_EQUAL_SYMBOL is not set
+# end of BNF语法
+
+#
+# MENU_CONFIG
+#
+CONFIG_WIRELESS=y
+
+#
+# Wireless protocols
+#
+CONFIG_WIFI=y
+# end of Wireless protocols
+
+#
+# Wi-Fi drivers
+#
+# CONFIG_WIFI_USB is not set
+CONFIG_WIFI_SDIO=y
+# end of Wi-Fi drivers
+# end of MENU_CONFIG
+
+#
+# choice
+#
+# CONFIG_DEBUG_NONE is not set
+# CONFIG_DEBUG_BASIC is not set
+CONFIG_DEBUG_FULL=y
+# end of choice

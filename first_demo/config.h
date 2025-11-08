@@ -3,12 +3,18 @@
 #define CONFIG_H
 
 #define CONFIG_MODULES 1
-#define CONFIG_MENU_MSG_1 ""
-#define CONFIG_MENU_MSG_2 ""
-#define CONFIG_SAY_HELLO 1
+#define CONFIG_SHOW_MENU 1
+#define CONFIG_PRINTF_MSG 1
 #define CONFIG_CUSTOM_MSG "Hello from Kconfig!"
 #define CONFIG_MAX_COUNT 3
-#define CONFIG_WHAT_HAPPEN 1
-#define CONFIG_CORE_BOOL 1
+#define CONFIG_MENU_MSG_1 ""
+#define CONFIG_MENU_MSG_2 ""
+#define CONFIG_EXPR_BASE_BOOL 1
+#define CONFIG_EXPR_BASE_INT 4
+#define CONFIG_EXPR_BASE_STRING "linux"
+#define CONFIG_WIRELESS 1
+#define CONFIG_WIFI 1
+#define CONFIG_WIFI_SDIO 1
+#define CONFIG_ARCH_RISCV 1
 
 #endif

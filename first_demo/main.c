@@ -26,15 +26,15 @@ int main() {
 
 
 
-#ifdef CONFIG_WILL_BE_OPEN_WHEN_A_IS_SELECTED
-    #ifdef CONFIG_SELECT_A_TO_MAKE_B_ON
+#if CONFIG_WILL_BE_OPEN_WHEN_A_IS_SELECTED
+    #if CONFIG_SELECT_A_TO_MAKE_B_ON
         printf("open a will make b is also on.\n");
     #endif
 #endif
 
 
-#ifdef CONFIG_WILL_BE_NOTE_WHEN_C_IS_SELECTED
-    #ifdef CONFIG_SELECT_C_TO_MAKE_NOTE_TO_OPEN_D
+#if CONFIG_WILL_BE_NOTE_WHEN_C_IS_SELECTED
+    #if CONFIG_SELECT_C_TO_MAKE_NOTE_TO_OPEN_D
         printf("not D when C is selected\n");
     #endif
 #endif
